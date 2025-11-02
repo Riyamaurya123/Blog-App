@@ -1,61 +1,62 @@
-import axios from 'axios'
-import React, { useState } from 'react'
-import toast from 'react-hot-toast'
+import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const CreateBlog = () => {
-  const [title, setTitle] = useState("")
-  const [category, setCategory] = useState("")
-  const [phone, setPhone] = useState("")
-  const [about, setAbout] = useState("")
-  const [blogImage, setBlogImage] = useState("")
-  const [blogImagePreview, setBlogImagePreview] = useState("")
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [phone, setPhone] = useState("");
+  const [about, setAbout] = useState("");
+  const [blogImage, setBlogImage] = useState("");
+  const [blogImagePreview, setBlogImagePreview] = useState("");
 
-  const changePhotoHandler = (e)=>{
-    console.log(e)
-    const file = e.target.files[0]
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload=()=>{
-      setBlogImagePreview(reader.result)
-      setBlogImage(file)
-    }
-  }
+  const changePhotoHandler = (e) => {
+    console.log(e);
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setBlogImagePreview(reader.result);
+      setBlogImage(file);
+    };
+  };
 
-  const handleCreateBlog = async(e)=>{
-    e.preventDefault()
-    const formData = new FormData()
-    formData.append('title',title)
-    formData.append('category', category)
-    formData.append('about',about)
-    formData.append('blogImage',blogImage)
+  const handleCreateBlog = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("about", about);
+    formData.append("blogImage", blogImage);
     try {
-      const {data}=await axios.post('http://localhost:4040/api/blogs/create',formData,
+      const { data } = await axios.post(
+        "http://localhost:4040/api/blogs/create",
+        formData,
         {
-          withCredentials:true,
+          withCredentials: true,
           headers: {
-            "Content-Type":"multipart/form-data",
-          }
+            "Content-Type": "multipart/form-data",
+          },
         }
-      )
-      console.log(data)
-      toast.success(data.message ||'user register successfull')
-      setAbout("")
-      setTitle("")
-      setCategory("")
-      setBlogImage("")
-      setBlogImagePreview("")
-
+      );
+      console.log(data);
+      toast.success(data.message || "user register successfull");
+      setAbout("");
+      setTitle("");
+      setCategory("");
+      setBlogImage("");
+      setBlogImagePreview("");
     } catch (error) {
-      console.log(error)
-      toast.error(error.message || "Please fill required fields")
+      console.log(error);
+      toast.error(
+        error.response?.data?.message || "Please fill required fields"
+      );
     }
-
-  }
-
+  };
 
   return (
     <div>
-       <div className="min-h-screen  py-10">
+      <div className="min-h-screen  py-10">
         <div className="max-w-4xl mx-auto p-6 border  rounded-lg shadow-lg">
           <h3 className="text-2xl font-semibold mb-8">Create Blog</h3>
           <form onSubmit={handleCreateBlog} className="space-y-6">
@@ -123,7 +124,7 @@ const CreateBlog = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateBlog
+export default CreateBlog;
